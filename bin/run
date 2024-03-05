@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "onair/bot"
+
+lisner = Onair::Bot::CameraListener.new
+Light = Onair::Bot::Light.new
+lisner.run do |on|
+  if on
+    Light.on
+  else
+    Light.off
+  end
+end
