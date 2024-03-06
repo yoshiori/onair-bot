@@ -26,6 +26,8 @@ module Onair
     end
 
     class CameraListener # rubocop:disable Style/Documentation
+      require "logger"
+
       IGNORE_COMMAND_NAMES = %w[pipewire wireplumb].freeze
 
       def initialize
@@ -39,10 +41,10 @@ module Onair
 
         @current_count = current_count
         if current_count > @base_count
-          puts "Camera is on"
+          logger.info "Camera is on"
           "ON"
         else
-          puts "Camera is off"
+          logger.info "Camera is off"
           "OFF"
         end
       end
@@ -55,6 +57,10 @@ module Onair
         end
 
         raise "Failed to execute lsof command. #{stderr}"
+      end
+
+      def logger
+        @logger ||= Logger.new($stdout)
       end
 
       def run
