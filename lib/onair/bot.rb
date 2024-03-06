@@ -56,7 +56,8 @@ module Onair
           return stdout.lines.reject { |line| IGNORE_COMMAND_NAMES.any? { |command| line.start_with?(command) } }.count
         end
 
-        raise "Failed to execute lsof command. #{stderr}"
+        logger.error "Failed to execute lsof command. #{stderr}"
+        @current_count
       end
 
       def logger
