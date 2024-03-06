@@ -7,7 +7,6 @@ require "open3"
 require "switchbot"
 require "dotenv/load"
 
-
 module Onair
   module Bot
     class Error < StandardError; end
@@ -27,6 +26,8 @@ module Onair
     end
 
     class CameraListener # rubocop:disable Style/Documentation
+      IGNORE_COMMAND_NAMES = %w[pipewire wireplumb].freeze
+
       def initialize
         @base_count = count
         @current_count = @base_count
@@ -48,7 +49,10 @@ module Onair
 
       def count
         stdout, stderr, status = Open3.capture3("lsof /dev/video0")
-        return stdout.lines.count if status.success?
+
+        if status.success?
+          return stdout.lines.reject { |line| IGNORE_COMMAND_NAMES.any? { |command| line.start_with?(command) } }.count
+        end
 
         raise "Failed to execute lsof command. #{stderr}"
       end
