@@ -1,0 +1,12 @@
+[Unit]
+Description=Check camera and toggle light.
+
+[Service]
+Type=forking
+Restart=always
+Environment="PATH=%h/.rbenv/shims:/usr/local/bin:/usr/bin:/usr/local/sbin:"
+ExecStart=%h/src/github.com/yoshiori/onair-bot/bin/run
+WorkingDirectory=%h/src/github.com/yoshiori/onair-bot
+
+[Install]
+WantedBy=default.target
