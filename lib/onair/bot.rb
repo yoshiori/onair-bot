@@ -6,7 +6,7 @@ require "open3"
 
 require "switchbot"
 require "dotenv/load"
-
+require "logger"
 module Onair
   module Bot
     class Error < StandardError; end
@@ -17,17 +17,19 @@ module Onair
       end
 
       def on
-        client.device(ENV["DEVICE_ID"]).on
+        logger.debug client.device(ENV["DEVICE_ID"]).on
       end
 
       def off
-        client.device(ENV["DEVICE_ID"]).off
+        logger.debug client.device(ENV["DEVICE_ID"]).off
+      end
+
+      def logger
+        @logger ||= Logger.new($stdout)
       end
     end
 
     class CameraListener # rubocop:disable Style/Documentation
-      require "logger"
-
       IGNORE_COMMAND_NAMES = %w[pipewire wireplumb].freeze
 
       def initialize
