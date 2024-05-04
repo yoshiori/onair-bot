@@ -5,6 +5,7 @@ require_relative "bot/version"
 require "open3"
 
 require "switchbot"
+require "retryable"
 require "dotenv/load"
 require "logger"
 module Onair
@@ -17,11 +18,22 @@ module Onair
       end
 
       def on
-        logger.debug client.device(ENV["DEVICE_ID"]).on
+        call(:on)
       end
 
       def off
-        logger.debug client.device(ENV["DEVICE_ID"]).off
+        call(:off)
+      end
+
+      def call(method)
+        Retryable.retryable(tries: 3) do
+          res = client.device(ENV["DEVICE_ID"]).send(method)
+          logger.debug res
+          unless res[:status_code] == 100
+            logger.error "Failed to turn #{method}"
+            rise "Failed to turn #{method}"
+          end
+        end
       end
 
       def logger
