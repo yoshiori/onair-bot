@@ -11,5 +11,6 @@ gem "rspec", "~> 3.0"
 
 gem "rubocop", "~> 1.21"
 
-gem "switchbot"
 gem "dotenv"
+gem "retryable"
+gem "switchbot"
