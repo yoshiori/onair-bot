@@ -31,7 +31,7 @@ module Onair
           logger.debug res
           unless res[:status_code] == 100
             logger.error "Failed to turn #{method}"
-            rise "Failed to turn #{method}"
+            raise "Failed to turn #{method}"
           end
         end
       end
