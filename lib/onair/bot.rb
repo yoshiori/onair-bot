@@ -3,6 +3,7 @@
 require_relative "bot/version"
 
 require "open3"
+require "json"
 
 require "switchbot"
 require "retryable"
@@ -28,7 +29,7 @@ module Onair
       def call(method)
         Retryable.retryable(tries: 3) do
           res = client.device(ENV["DEVICE_ID"]).send(method)
-          logger.debug res
+          logger.debug JSON.pretty_generate(res)
           unless res[:status_code] == 100
             logger.error "Failed to turn #{method}"
             raise "Failed to turn #{method}"
@@ -45,8 +46,8 @@ module Onair
       IGNORE_COMMAND_NAMES = %w[pipewire wireplumb].freeze
 
       def initialize
-        @base_count = count
-        @current_count = @base_count
+        @prev_count = count
+        @current_count = @prev_count
       end
 
       def check
@@ -54,13 +55,15 @@ module Onair
         return nil if current_count == @current_count
 
         @current_count = current_count
-        if current_count > @base_count
+        if current_count > @prev_count
           logger.info "Camera is on"
           "ON"
         else
           logger.info "Camera is off"
           "OFF"
         end
+        logger.info "Camera count: #{current_count}"
+        @prev_count = current_count
       end
 
       def count
