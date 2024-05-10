@@ -48,21 +48,19 @@ module Onair
 
       def initialize
         @prev_count = count
-        @current_count = @prev_count
       end
 
       def check
         current_count = count
-        return nil if current_count == @current_count
+        return nil if current_count == @prev_count
 
-        @current_count = current_count
-        if current_count > @prev_count
-          logger.info "Camera is on"
-          status = "ON"
-        else
-          logger.info "Camera is off"
-          status = "OFF"
-        end
+        status = if current_count > @prev_count
+                   logger.info "Camera is on"
+                   "ON"
+                 else
+                   logger.info "Camera is off"
+                   "OFF"
+                 end
         logger.info "Camera count: #{current_count}"
         @prev_count = current_count
         status
@@ -76,7 +74,7 @@ module Onair
         end
 
         logger.error "Failed to execute lsof command. #{stderr}"
-        @current_count
+        @prev_count
       end
 
       def logger
