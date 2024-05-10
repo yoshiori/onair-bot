@@ -27,6 +27,7 @@ module Onair
       end
 
       def call(method)
+        logger.debug "Call #{method}"
         Retryable.retryable(tries: 3) do
           res = client.device(ENV["DEVICE_ID"]).send(method)
           logger.debug JSON.pretty_generate(res)
@@ -57,13 +58,14 @@ module Onair
         @current_count = current_count
         if current_count > @prev_count
           logger.info "Camera is on"
-          "ON"
+          status = "ON"
         else
           logger.info "Camera is off"
-          "OFF"
+          status = "OFF"
         end
         logger.info "Camera count: #{current_count}"
         @prev_count = current_count
+        status
       end
 
       def count

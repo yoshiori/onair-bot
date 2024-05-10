@@ -5,11 +5,11 @@ require "bundler/setup"
 require "onair/bot"
 
 lisner = Onair::Bot::CameraListener.new
-Light = Onair::Bot::Light.new
+light = Onair::Bot::Light.new
 lisner.run do |on|
   if on
-    Light.on
+    light.on
   else
-    Light.off
+    light.off
   end
 end
