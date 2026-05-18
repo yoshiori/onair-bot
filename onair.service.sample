@@ -1,11 +1,10 @@
 [Unit]
-Description=Check camera and toggle light.
+Description=Turn on an on-air light when the camera is in use.
 
 [Service]
 Type=simple
 Restart=always
-Environment="PATH=%h/.local/share/mise/shims:/usr/local/bin:/usr/bin:/usr/local/sbin:"
-ExecStart=%h/src/github.com/yoshiori/onair-bot/bin/run
+ExecStart=%h/src/github.com/yoshiori/onair-bot/target/release/onair-bot
 WorkingDirectory=%h/src/github.com/yoshiori/onair-bot
 
 [Install]
