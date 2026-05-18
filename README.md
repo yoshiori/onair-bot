@@ -33,7 +33,7 @@ systemctl --user daemon-reload
 ### enable
 
 ```bash
-systemctl --user enable onair.servic
+systemctl --user enable onair.service
 ```
 
 ## Contributing
