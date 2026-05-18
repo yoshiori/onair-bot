@@ -74,7 +74,7 @@ module Onair
         end
 
         logger.error "Failed to execute lsof command. status: #{status}, stderr: #{stderr}"
-        @prev_count || 0
+        0
       end
 
       def logger
